@@ -1,6 +1,5 @@
 import numpy as np
 from pyESN import ESN
-import Parity_Data_Generator
 
 class slowESN():
     def __init__(self, arity=3, randomState=np.random.RandomState(42)):
@@ -31,8 +30,8 @@ class slowESN():
         elif arity == 4:
             self.slowESN = ESN(n_inputs=1,
                           n_outputs=1,
-                          n_reservoir=1000,  # from 200 onwards test error decreases significantly
-                          spectral_radius=0.95,  # from 0.9 the test error is 0.0
+                          n_reservoir=1000,  # from 800 onwards test error decreases significantly
+                          spectral_radius=0.95,
                           sparsity=0.95,
                           noise=0.001,
                           input_shift=0,
@@ -48,14 +47,8 @@ class slowESN():
         pred_train = self.slowESN.fit(train, target)
 
     def predict(self, inputs):
-
-    # print("Test error:")
         pred_test = self.slowESN.predict(inputs)
-        better_pred_test = []
+        better_pred_test = []           # Maybe don't round
         for x in pred_test:
             better_pred_test.append(0 if x < 0.5 else 1)
         return np.array(better_pred_test)
-        # print(better_pred_test)
-
-
-######## For testing #########

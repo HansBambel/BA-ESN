@@ -24,5 +24,3 @@ predictedParity = nParityESN.predict(test_bits)
 print("Testing error")
 print(np.sqrt(np.mean((predictedParity-test_output)**2)))
 # predicted_Parity = InputToParityESN.fit(training_bits, training_parity, rng)
-
-
