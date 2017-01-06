@@ -1,9 +1,9 @@
 import numpy as np
 
 
-def generateParityData(N=1000, n=3, randomstate=42):
+def generateParityData(N=10000, n=3, randomstate=np.random.RandomState(42)):
 
-    rng = np.random.RandomState(randomstate)
+    rng = randomstate
     bits = rng.randint(2, size=N)
 
     # Calculate n-parity
