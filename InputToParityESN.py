@@ -48,7 +48,7 @@ class slowESN():
 
     def predict(self, inputs):
         pred_test = self.slowESN.predict(inputs)
-        better_pred_test = []           # Maybe don't round
+        better_pred_test = []           # Maybe don't round and return "true" results from pred_test
         for x in pred_test:
             better_pred_test.append(0 if x < 0.5 else 1)
         return np.array(better_pred_test)
