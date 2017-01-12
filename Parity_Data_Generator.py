@@ -3,8 +3,10 @@ import numpy as np
 
 def generateParityData(N=10000,
                        n=3,
-                       zero=[1, 0, 1, 0, 1, 0],
-                       one= [1, 1, 1, 0, 0, 0],
+                       # zero=[1, 0, 1, 0, 1, 0],
+                       # one= [1, 1, 1, 0, 0, 0],
+                       zero=[0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5],
+                       one= [1, 1, 0, 0, 1, 1, 0, 0],
                        randomstate=np.random.RandomState(42)):
 
     if len(zero)!=len(one):

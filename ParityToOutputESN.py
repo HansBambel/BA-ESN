@@ -1,6 +1,7 @@
 import numpy as np
 from pyESN import ESN
 import Parity_Data_Generator
+import matplotlib.pyplot as plt
 
 # TODO create fast ESN
 class fastESN():
@@ -8,7 +9,7 @@ class fastESN():
         self.fastESN = ESN(n_inputs=1,
                           n_outputs=1,
                           n_reservoir=100,                  # TODO tweak stuff
-                          spectral_radius=0.85,
+                          spectral_radius=0.95,
                           sparsity=0.95,
                           noise=0.001,
                           input_shift=0,
@@ -21,14 +22,14 @@ class fastESN():
                           silent=False)
 
     def fit(self, train, target):
-        print("Fast-fit", np.shape(train), np.shape(target))
+        # print("Fast-fit", np.shape(train), np.shape(target))
         pred_train = self.fastESN.fit(train, target)
 
     def predict(self, input):
         return self.fastESN.predict(input)
 
 ## Testing ##
-N = 20000   # number of datapoints
+N = 10000   # number of datapoints
 n = 3       # n-parity
 bits, parity, target = Parity_Data_Generator.generateParityData(N, n)
 
@@ -49,3 +50,8 @@ predictedTargets = targetESN.predict(test_targets)
 print("Test error")
 print(np.sqrt(np.mean((predictedTargets-test_targets)**2)))
 # TODO give output as plot
+plt.subplot(211)
+plt.plot(test_targets[13500:13600])
+plt.subplot(212)
+plt.plot(predictedTargets[13500:13600])
+plt.show()
