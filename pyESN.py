@@ -27,7 +27,7 @@ def correct_dimensions(s, targetlength):
 class ESN():
 
     def __init__(self, n_inputs, n_outputs, n_reservoir=200,
-                 spectral_radius=0.95, sparsity=0, noise=0.001, input_shift=None,
+                 spectral_radius=0.95, leak_rate=1, sparsity=0, noise=0.001, input_shift=None,
                  input_scaling=None, teacher_forcing=True, feedback_scaling=None,
                  teacher_scaling=None, teacher_shift=None,
                  out_activation=lambda x: x, inverse_out_activation=lambda x: x,
@@ -38,6 +38,7 @@ class ESN():
             n_outputs: nr of output dimensions
             n_reservoir: nr of reservoir neurons
             spectral_radius: spectral radius of the recurrent weight matrix
+            leak_rate: how much of the previous activation will be forgotten
             sparsity: proportion of recurrent weights set to zero
             noise: noise added to each neuron (regularization)
             input_shift: scalar or vector of length n_inputs to add to each
@@ -58,6 +59,7 @@ class ESN():
         self.n_reservoir = n_reservoir
         self.n_outputs = n_outputs
         self.spectral_radius = spectral_radius
+        self.leak_rate = leak_rate
         self.sparsity = sparsity
         self.noise = noise
         self.input_shift = correct_dimensions(input_shift, n_inputs)
