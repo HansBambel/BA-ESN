@@ -7,33 +7,26 @@ rng = np.random.RandomState(42)
 
 N = 20000   # number of datapoints
 n = 3       # n-parity
-zero = [1, 0, 1, 0, 1, 0]      # encoding for a zero
-one =  [1, 1, 1, 0, 0, 0]      # encoding for a one
 # produce Data
-bits, parity, target = Parity_Data_Generator.generateParityData(N, n, zero, one, randomstate=rng)
+bits, parity, target = Parity_Data_Generator.generateParityData(N, n, randomstate=rng)
 
 # Divide in training and test data
-traintest_cutoff = int(np.ceil(0.7 * N))
+traintest_cutoff = int(np.ceil(0.7 * len(bits)))
 train_bits, test_bits = bits[:traintest_cutoff], bits[traintest_cutoff:]
-train_output, test_output = parity[:traintest_cutoff], parity[traintest_cutoff:]
+train_parity, test_parity = parity[:traintest_cutoff], parity[traintest_cutoff:]
+train_targets, test_targets = target[:traintest_cutoff], target[traintest_cutoff:]
 
 print("### Input-->Parity ###")
 # get good configs for a slow ESN
 nParityESN = InputToParityESN.slowESN(n, rng)
 
-nParityESN.fit(train_bits, train_output)
+nParityESN.fit(train_bits, train_parity)
 predictedParity = nParityESN.predict(test_bits)
 print("Testing error")
-print(np.sqrt(np.mean((predictedParity-test_output)**2)))
-# predicted_Parity = InputToParityESN.fit(training_bits, training_parity, rng)
+print(np.sqrt(np.mean((predictedParity - test_parity) ** 2)))
 
 ##################################
 print("### Parity-->Target ###")
-
-#prepare Data
-# predicted Parity-size is only a portion of targets --> multiply each by length of encoding
-traintest_cutoff_targets = int(np.ceil(0.7*len(target)))
-train_targets, test_targets = target[:traintest_cutoff_targets], target[traintest_cutoff_targets:]
 
 targetESN = ParityToOutputESN.fastESN(rng)
 targetESN.fit(predictedParity, train_targets)

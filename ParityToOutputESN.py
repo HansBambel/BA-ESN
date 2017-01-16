@@ -34,16 +34,11 @@ N = 10000   # number of datapoints
 n = 3       # n-parity
 bits, parity, target = Parity_Data_Generator.generateParityData(N, n)
 
-# multiply each parity-element by length of encoding (10 default)
-increased_parity = []
-for p in parity:
-    increased_parity = increased_parity + 8*[p]
-increased_parity = np.array(increased_parity)
 # print(len(increased_parity))
 # traintest_cutoff = int(np.ceil(0.7 * N))
 # train_parity, test_parity = parity[:traintest_cutoff], parity[traintest_cutoff:]
 traintest_cutoff_targets = int(np.ceil(0.7*len(target)))
-train_targets, test_targets, train_parity = target[:traintest_cutoff_targets], target[traintest_cutoff_targets:], increased_parity[:traintest_cutoff_targets]
+train_targets, test_targets, train_parity = target[:traintest_cutoff_targets], target[traintest_cutoff_targets:], parity[:traintest_cutoff_targets]
 
 targetESN = fastESN()
 targetESN.fit(train_parity, train_targets)
