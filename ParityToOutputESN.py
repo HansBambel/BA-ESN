@@ -15,7 +15,7 @@ class fastESN():
                           input_shift=0,
                           input_scaling=3,  # 3 seems to be fine. Maybe use lower
                           teacher_scaling=1.12, # 1.12
-                          teacher_shift=-0.7,   # -0.7
+                          teacher_shift=-0.25,   # -0.7
                           out_activation=np.tanh,
                           inverse_out_activation=np.arctanh,
                           random_state=randomState,
@@ -36,7 +36,7 @@ bits, parity, target = Parity_Data_Generator.generateParityData(N, n)
 # multiply each parity-element by length of encoding (10 default)
 increased_parity = []
 for p in parity:
-    increased_parity = increased_parity + 6*[p]
+    increased_parity = increased_parity + 8*[p]
 increased_parity = np.array(increased_parity)
 # print(len(increased_parity))
 # traintest_cutoff = int(np.ceil(0.7 * N))
@@ -48,6 +48,8 @@ targetESN = fastESN()
 targetESN.fit(train_parity, train_targets)
 predictedTargets = targetESN.predict(test_targets)
 print("Test error")
+print(np.shape(predictedTargets))
+print(np.shape(test_targets))
 print(np.sqrt(np.mean((predictedTargets-test_targets)**2)))
 # TODO give output as plot
 plt.subplot(211)

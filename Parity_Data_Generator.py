@@ -31,10 +31,14 @@ def generateParityData(N=10000,
                 parity.append(0)
                 target = target + zero
             # parity.append(1 if odd else 0)
-    return bits, np.array(parity), np.array(target)
+    parity = np.array(parity).reshape(-1,1)
+    # print(np.shape(parity))
+    target = np.array(target).reshape(-1,1)
+    return bits, parity, target
 
 
-# bits, parity = generateParityData()
+# bits, parity, target = generateParityData()
+# print(np.shape(parity))
 # print("len(bits):",len(bits), "len(parity)",len(parity))
 # print(bits[0:20])
 # print(parity[0:20])
