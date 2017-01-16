@@ -11,6 +11,7 @@ class fastESN():
                           n_reservoir=100,                  # TODO tweak stuff
                           spectral_radius=0.95,
                           sparsity=0.95,
+                          leak_rate=1,
                           noise=0.001,
                           input_shift=0,
                           input_scaling=3,  # 3 seems to be fine. Maybe use lower
@@ -48,8 +49,6 @@ targetESN = fastESN()
 targetESN.fit(train_parity, train_targets)
 predictedTargets = targetESN.predict(test_targets)
 print("Test error")
-print(np.shape(predictedTargets))
-print(np.shape(test_targets))
 print(np.sqrt(np.mean((predictedTargets-test_targets)**2)))
 # TODO give output as plot
 plt.subplot(211)

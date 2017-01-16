@@ -17,6 +17,7 @@ class slowESN():
                           n_outputs=1,
                           n_reservoir=500,  # from 200 onwards test error decreases significantly
                           spectral_radius=0.85,  # from 0.9 the test error is 0.0
+                          leak_rate= 1,
                           sparsity=0.95,
                           noise=0.001,
                           input_shift=0,
@@ -33,6 +34,7 @@ class slowESN():
                           n_reservoir=1000,  # from 800 onwards test error decreases significantly
                           spectral_radius=0.95,
                           sparsity=0.95,
+                          leak_rate=1,
                           noise=0.001,
                           input_shift=0,
                           input_scaling=3,  # 3 seems to be fine. Maybe use lower
