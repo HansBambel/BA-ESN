@@ -10,11 +10,11 @@ def generateParityData(N=10000,
                        randomstate=np.random.RandomState(42)):
 
     if  zero is None:
-        zero = [0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5,
-                0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5]
+        zero = [0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5]
+                # 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5, 0.5, -0.5]
     if one is None:
-        one = [1, 1, 0, 0, 1, 1, 0, 0, 1, 1,
-                0, 0, 1, 1, 0, 0, 1, 1, 0, 0]
+        one = [1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0]
+                # 0, 0, 1, 1, 0, 0, 1, 1, 0, 0]
 
     if len(zero)!=len(one):
         raise ValueError("Encodings for Zero and One need to be the same length")
