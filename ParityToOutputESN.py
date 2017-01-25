@@ -1,7 +1,9 @@
-import numpy as np
-from pyESN import ESN
-import Parity_Data_Generator
 import matplotlib.pyplot as plt
+import numpy as np
+
+import Parity_Data_Generator
+from pyESN import ESN
+
 
 # TODO create fast ESN
 class fastESN():

@@ -1,7 +1,8 @@
-import Parity_Data_Generator
+import numpy as np
+
 import InputToParityESN
 import ParityToOutputESN
-import numpy as np
+import Parity_Data_Generator
 
 rng = np.random.RandomState(42)
 
