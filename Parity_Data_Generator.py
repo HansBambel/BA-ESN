@@ -11,12 +11,19 @@ def generateParityData(N=10000,
 
     if  zero is None:
         # zero = [0, -0.5, 0, -0.5, 0, -0.5, 0, -0.5, 0, -0, 0, -0.5]
-        zero = [0, 0.25, 0.5, 0.25, 0, 0.25, 0.5, 0.25, 0, 0.25, 0.5, 0.25]
-                #,0, 0.25, 0, 0.25, 0, 0.25, 0, 0.25]
+        zero = [0, 0.25, 0, -0.25,
+                0, 0.25, 0, -0.25,
+                0, 0.25, 0, -0.25,
+                # 0, 0.25, 0, -0.25,
+                0, 0.25, 0, -0.25]
     if one is None:
         # one = [0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0]
-        one = [0,0,0,0,0,0,0,0,0,0,0,0]
-        # TODO evtl konstanten output
+        # konstanter output
+        one = [0, 0, 0, 0,
+               0, 0, 0, 0,
+               0, 0, 0, 0,
+               # 0, 0, 0, 0,
+               0, 0, 0, 0]
 
     if len(zero)!=len(one):
         raise ValueError("Encodings for Zero and One need to be the same length")
@@ -40,22 +47,19 @@ def generateParityData(N=10000,
                 parity.append(0)
                 target = target + zero
             # parity.append(1 if odd else 0)
-    bits = np.array(bits).reshape(-1,1)
-    parity = np.array(parity).reshape(-1,1)
+    bits = np.array(bits)
+    parity = np.array(parity)
     target = np.array(target).reshape(-1,1)
 
-    ext_bits, ext_parity = [], []
-    for i in range(len(bits)):
-        for j in range(len(zero)):
-            ext_bits.append(bits[i])
-            ext_parity.append(parity[i])
-    ext_bits = np.array(ext_bits)
-    ext_parity = np.array(ext_parity)
+    ext_bits = np.repeat(bits, len(zero)).reshape(-1, 1)
+    ext_parity = np.repeat(parity, len(zero)).reshape(-1, 1)
     return ext_bits, ext_parity, target
 
-
+# import time
+# start_time = time.time()
 # bits, parity, target = generateParityData()
+# print("--- %s seconds ---" % (time.time() - start_time))
 # print(np.shape(bits),np.shape(parity),np.shape(target))
 # print("len(bits):",len(bits), "len(parity)",len(parity))
-# print(bits[0:20])
-# print(parity[0:20])
+# print(bits[66600:66680].reshape(-1))
+# print(parity[66600:66680].reshape(-1))
