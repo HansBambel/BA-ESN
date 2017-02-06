@@ -114,11 +114,11 @@ class ESN():
         to the last state & and feeding in the current input and output patterns
         """
         if self.teacher_forcing:
-            self.preactivation = (1-self.leak_rate)*self.preactivation+ self.leak_rate*(np.dot(self.W, state)
+            self.preactivation = (1-self.leak_rate)*self.preactivation+ (np.dot(self.W, state)
                              + np.dot(self.W_in, input_pattern)
                              + np.dot(self.W_feedb, output_pattern))
         else:
-            self.preactivation = (1-self.leak_rate)*self.preactivation+ self.leak_rate*(np.dot(self.W, state)
+            self.preactivation = (1-self.leak_rate)*self.preactivation+ (np.dot(self.W, state)
                              + np.dot(self.W_in, input_pattern))
         return (np.tanh(self.preactivation)
                 + self.noise * (self.random_state_.rand(self.n_reservoir) - 0.5))
