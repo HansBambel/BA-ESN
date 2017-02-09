@@ -51,7 +51,7 @@ class ESN():
             out_activation: output activation function (applied to the readout)
             inverse_out_activation: inverse of the output activation function
             random_state: positive integer seed, np.rand.RandomState object,
-                          or None to use numpy's builting RandomState.
+                          or None to use numpy's built-in RandomState.
             silent: supress messages
         """
         # check for proper dimensionality of all arguments and write them down.
