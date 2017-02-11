@@ -200,11 +200,13 @@ class ESN():
         if inspect:
             from matplotlib import pyplot as plt
             # (^-- we depend on matplotlib only if this option is used)
-            plt.figure(
-                figsize=(states.shape[0] * 0.0025, states.shape[1] * 0.01))
+            # plt.figure(
+            #     figsize=(states.shape[0] * 0.0025, states.shape[1] * 0.01))
+            plt.figure(figsize=(10,6))
             plt.imshow(extended_states.T, aspect='auto',
                        interpolation='nearest')
             plt.colorbar()
+            plt.show()
 
         if not self.silent:
             print("training error:")
