@@ -3,7 +3,7 @@ import numpy as np
 
 def generateParityData(N=10000,
                        n=3,
-                       timescale=16,
+                       timescale=12,
                        randomstate=np.random.RandomState(42)):
 
     if timescale < 1:
@@ -34,6 +34,7 @@ def generateParityData(N=10000,
     ext_bits = np.repeat(bits, timescale).reshape(-1, 1)
     ext_parity = np.repeat(parity, timescale).reshape(-1, 1)
     ext_target = np.repeat(target, timescale).reshape(-1, 1)
+
     return ext_bits, ext_parity, ext_target
 
 # import time
