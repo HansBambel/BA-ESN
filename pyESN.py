@@ -34,7 +34,7 @@ class ESN():
                  random_state=None, silent=True):
         """
         Args:
-            n_inputs: nr of input dimensions
+            n_inputs: nr of input dimensionsp
             n_outputs: nr of output dimensions
             n_reservoir: nr of reservoir neurons
             spectral_radius: spectral radius of the recurrent weight matrix
