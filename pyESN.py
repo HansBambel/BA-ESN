@@ -113,12 +113,13 @@ class ESN():
         i.e., computes the next network state by applying the recurrent weights
         to the last state & and feeding in the current input and output patterns
         """
+        delta_t = 0.1
         if self.teacher_forcing:
-            self.preactivation = (1-self.leak_rate)*self.preactivation+ (np.dot(self.W, state)
+            self.preactivation = (1-self.leak_rate*delta_t)*self.preactivation+ delta_t*(np.dot(self.W, state)
                              + np.dot(self.W_in, input_pattern)
                              + np.dot(self.W_feedb, output_pattern))
         else:
-            self.preactivation = (1-self.leak_rate)*self.preactivation+ (np.dot(self.W, state)
+            self.preactivation = (1-self.leak_rate*delta_t)*self.preactivation+ delta_t*(np.dot(self.W, state)
                              + np.dot(self.W_in, input_pattern))
         return (np.tanh(self.preactivation)
                 + self.noise * (self.random_state_.rand(self.n_reservoir) - 0.5))
