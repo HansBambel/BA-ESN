@@ -27,7 +27,7 @@ def correct_dimensions(s, targetlength):
 class ESN():
 
     def __init__(self, n_inputs, n_outputs, n_reservoir=200,
-                 spectral_radius=0.95, leak_rate=1, sparsity=0, noise=0.001, input_shift=None,
+                 spectral_radius=0.95, leak_rate=1, delta_t=1, sparsity=0, noise=0.001, input_shift=None,
                  input_scaling=None, teacher_forcing=False, feedback_scaling=None,
                  teacher_scaling=None, teacher_shift=None,
                  out_activation=lambda x: x, inverse_out_activation=lambda x: x,
@@ -39,6 +39,7 @@ class ESN():
             n_reservoir: nr of reservoir neurons
             spectral_radius: spectral radius of the recurrent weight matrix
             leak_rate: how much of the previous activation will be forgotten
+            delta_t: how fast the network is able to change
             sparsity: proportion of recurrent weights set to zero
             noise: noise added to each neuron (regularization)
             input_shift: scalar or vector of length n_inputs to add to each
@@ -60,6 +61,7 @@ class ESN():
         self.n_outputs = n_outputs
         self.spectral_radius = spectral_radius
         self.leak_rate = leak_rate
+        self.delta_t = delta_t
         self.sparsity = sparsity
         self.noise = noise
         self.input_shift = correct_dimensions(input_shift, n_inputs)
@@ -113,13 +115,12 @@ class ESN():
         i.e., computes the next network state by applying the recurrent weights
         to the last state & and feeding in the current input and output patterns
         """
-        delta_t = 0.1
         if self.teacher_forcing:
-            self.preactivation = (1-self.leak_rate*delta_t)*self.preactivation+ delta_t*(np.dot(self.W, state)
+            self.preactivation = (1-self.leak_rate*self.delta_t)*self.preactivation+ self.delta_t*(np.dot(self.W, state)
                              + np.dot(self.W_in, input_pattern)
                              + np.dot(self.W_feedb, output_pattern))
         else:
-            self.preactivation = (1-self.leak_rate*delta_t)*self.preactivation+ delta_t*(np.dot(self.W, state)
+            self.preactivation = (1-self.leak_rate*self.delta_t)*self.preactivation+ self.delta_t*(np.dot(self.W, state)
                              + np.dot(self.W_in, input_pattern))
         return (np.tanh(self.preactivation)
                 + self.noise * (self.random_state_.rand(self.n_reservoir) - 0.5))
