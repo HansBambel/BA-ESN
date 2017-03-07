@@ -3,36 +3,16 @@ import numpy as np
 
 def generateParityData(N=10000,
                        n=3,
-                       # zero=[1, 0, 1, 0, 1, 0],
-                       # one= [1, 1, 1, 0, 0, 0],
-                       zero=None,
-                       one= None,
+                       timescale=12,
                        randomstate=np.random.RandomState(42)):
 
-    if  zero is None:
-        # zero = [0, -0.5, 0, -0.5, 0, -0.5, 0, -0.5, 0, -0, 0, -0.5]
-        zero = [0, 0.25, 0, -0.25,
-                0, 0.25, 0, -0.25,
-                0, 0.25, 0, -0.25,
-                # 0, 0.25, 0, -0.25,
-                0, 0.25, 0, -0.25]
-    if one is None:
-        # one = [0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0.5, 0.5, 0, 0]
-        # konstanter output
-        one = [0, 0, 0, 0,
-               0, 0, 0, 0,
-               0, 0, 0, 0,
-               # 0, 0, 0, 0,
-               0, 0, 0, 0]
+    if timescale < 1:
+        raise ValueError("Timescale can't be lower than 1")
 
-    if len(zero)!=len(one):
-        raise ValueError("Encodings for Zero and One need to be the same length")
     rng = randomstate
     bits = rng.randint(2, size=N)
-
     # first (unimportant) targets
-    target = n * len(zero) * [0]
-
+    target = n*[0]
     # Calculate n-parity
     parity = n*[0]
     for i in range(n, N):
@@ -42,18 +22,20 @@ def generateParityData(N=10000,
                     odd = not odd
             if odd:
                 parity.append(1)
-                target = target + one
+                target.append(1)
             else:
                 parity.append(0)
-                target = target + zero
+                target.append(0)
             # parity.append(1 if odd else 0)
     bits = np.array(bits)
     parity = np.array(parity)
-    target = np.array(target).reshape(-1,1)
+    target = np.array(target)
 
-    ext_bits = np.repeat(bits, len(zero)).reshape(-1, 1)
-    ext_parity = np.repeat(parity, len(zero)).reshape(-1, 1)
-    return ext_bits, ext_parity, target
+    ext_bits = np.repeat(bits, timescale).reshape(-1, 1)
+    ext_parity = np.repeat(parity, timescale).reshape(-1, 1)
+    ext_target = np.repeat(target, timescale).reshape(-1, 1)
+
+    return ext_bits, ext_parity, ext_target
 
 # import time
 # start_time = time.time()
