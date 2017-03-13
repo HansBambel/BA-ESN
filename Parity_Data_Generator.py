@@ -1,9 +1,9 @@
 import numpy as np
 
 
-def generateParityData(N=10000,
+def generateParityData(N=5000,
                        n=3,
-                       timescale=12,
+                       timescale=50,
                        randomstate=np.random.RandomState(42)):
 
     if timescale < 1:
