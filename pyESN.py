@@ -34,7 +34,7 @@ class ESN():
                  random_state=None, silent=True):
         """
         Args:
-            n_inputs: nr of input dimensionsp
+            n_inputs: nr of input dimensions
             n_outputs: nr of output dimensions
             n_reservoir: nr of reservoir neurons
             spectral_radius: spectral radius of the recurrent weight matrix
@@ -252,6 +252,9 @@ class ESN():
         for n in range(n_samples):
             states[
                 n + 1, :] = self._update(states[n, :], inputs[n + 1, :], outputs[n, :])
+            # print("States",np.shape(states))
+            # print("inputs",np.shape(inputs))
+            # print("concatenated:",np.shape( np.concatenate([states[n + 1, :], inputs[n + 1, :]])))
             outputs[n + 1, :] = self.out_activation(np.dot(self.W_out,
                                                            np.concatenate([states[n + 1, :], inputs[n + 1, :]])))
 
