@@ -4,11 +4,11 @@ from BlockedLeastSquares import BlockedLeastSquares
 
 class ESN(object):
     def __init__(self, neurons, inputs, leak_rate, spectral_radius, dt, sparsity, noise):
-        self.W_rec = np.random.randn(neurons, neurons)
-        self.W_rec[np.random.rand(*self.W_rec.shape) < sparsity] = 0
+        self.W_rec = np.random.randn(neurons, neurons)                  # recurrent matrix
+        self.W_rec[np.random.rand(*self.W_rec.shape) < sparsity] = 0    # force sparsity
         self.W_rec /= np.abs(np.linalg.eigvals(self.W_rec)).max()
-        self.W_rec *= spectral_radius
-        self.W_in = np.random.randn(neurons, inputs) * np.sqrt(np.pi / 2) / inputs
+        self.W_rec *= spectral_radius                                   # enforce spectral radius
+        self.W_in = np.random.randn(neurons, inputs) * np.sqrt(np.pi / 2) / np.sqrt(inputs)  # inputmatrix scaled by number of inputs
         self.state = np.random.rand(neurons, 1) * 2 - 1
         self.leak_rate = leak_rate
         self.spectral_radius = spectral_radius
