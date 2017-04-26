@@ -3,12 +3,13 @@ from BlockedLeastSquares import BlockedLeastSquares
 
 
 class ESN(object):
-    def __init__(self, neurons, inputs, leak_rate, spectral_radius, dt, sparsity, noise):
+    def __init__(self, neurons, inputs, leak_rate, spectral_radius, dt, sparsity, noise, input_scale=1, input_shift=0):
         self.W_rec = np.random.randn(neurons, neurons)                  # recurrent matrix
         self.W_rec[np.random.rand(*self.W_rec.shape) < sparsity] = 0    # force sparsity
         self.W_rec /= np.abs(np.linalg.eigvals(self.W_rec)).max()
         self.W_rec *= spectral_radius                                   # enforce spectral radius
-        self.W_in = np.random.randn(neurons, inputs) * np.sqrt(np.pi / 2) / np.sqrt(inputs)  # inputmatrix scaled by number of inputs
+        self.W_in = np.random.randn(neurons, inputs) / np.sqrt(inputs)  # inputmatrix scaled by number of inputs
+        # annahme: input-werte haben standard deviation = 1
         self.state = np.random.rand(neurons, 1) * 2 - 1
         self.leak_rate = leak_rate
         self.spectral_radius = spectral_radius
@@ -16,11 +17,14 @@ class ESN(object):
         self.sparsity = sparsity
         self.noise = noise
         self.neurons = neurons
+        self.input_scale = input_scale
+        self.input_shift = input_shift
 
     def _state_update(self, inp):
         self.state += self.dt * (-self.leak_rate * self.state + np.tanh(
-            self.W_in.dot(inp.reshape((-1, 1))) + self.W_rec.dot(self.state))) + self.noise * np.random.randn(
+            self.W_in.dot(inp.reshape((-1, 1))*self.input_scale+self.input_shift) + self.W_rec.dot(self.state))) + self.noise * np.random.randn(
             self.neurons, 1)
+        self.state[0] = 1   # bias term
 
     def train(self, data, targets, washout=0, block_size=10000):
         lstsq = BlockedLeastSquares()
