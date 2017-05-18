@@ -21,9 +21,12 @@ class ESN(object):
         self.input_shift = input_shift
 
     def _state_update(self, inp):
+        # self.state += self.dt * (-self.leak_rate * self.state + np.tanh(
+        #     self.W_in.dot(inp.reshape((-1, 1))*self.input_scale+self.input_shift) + self.W_rec.dot(self.state))) + self.noise * np.random.randn(
+        #     self.neurons, 1)
+        # performance boost:
         self.state += self.dt * (-self.leak_rate * self.state + np.tanh(
-            self.W_in.dot(inp.reshape((-1, 1))*self.input_scale+self.input_shift) + self.W_rec.dot(self.state))) + self.noise * np.random.randn(
-            self.neurons, 1)
+            inp.reshape((-1,1)) + self.W_rec.dot(self.state))) + self.noise * np.random.randn(self.neurons, 1)
         self.state[0] = 1   # bias term
 
     def train(self, data, targets, washout=0, block_size=10000):
@@ -32,13 +35,15 @@ class ESN(object):
         block_num = int(np.ceil((data.shape[0] - washout) / block_size))
         # print(block_num)
         # wash out initial network state
-        for i, row in enumerate(data[:washout, :]):
+        washoutblock = self.W_in.dot(data[:washout, :].T*self.input_scale+self.input_shift)
+        for i, row in enumerate(washoutblock.T):
             self._state_update(row)
 
         for j in range(block_num):
             block = data[washout + j * block_size:washout + (j + 1) * block_size, :]
             state_values = np.empty((block.shape[0], self.neurons))
-            for i, row in enumerate(block):
+            block = self.W_in.dot(block.T*self.input_scale+self.input_shift)
+            for i, row in enumerate(block.T):
                 self._state_update(row)
                 state_values[i, :] = self.state.ravel()
             lstsq.update(targets[washout + j * block_size:washout + (j + 1) * block_size, :], state_values)
@@ -54,8 +59,9 @@ class ESN(object):
         if readout_weights == None:
             readout_weights = self.readout_weights
 
+        block = self.W_in.dot(data.T * self.input_scale + self.input_shift)
         readout_values = np.empty((data.shape[0], readout_weights.shape[0]))
-        for i, row in enumerate(data):
+        for i, row in enumerate(block.T):
             self._state_update(row)
             readout_values[i, :] = readout_weights.dot(self.state).ravel()
         return readout_values
