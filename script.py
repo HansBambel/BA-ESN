@@ -24,7 +24,7 @@ params = generateParams(jobID)
 N = 4000   # number of datapoints
 n = 3       # n-parity
 timescale = 50
-rng = np.random.RandomState(1578) #TODO
+rng = np.random.RandomState(1578) # maybe other seed 
 inputESN_reservoirSize=300
 outputESN_reservoirSize= 50
 
@@ -73,6 +73,6 @@ for trial in range(averages):
 averaged_error = errors.mean()
 
 all_outputs = dict(params=params,errors=errors,averaged_error=averaged_error)
-# TODO save params and errors and average
-with open("esnError{:>05}.p".format(jobID), 'wb') as outputFile:
+# save params and errors and average
+with open("/home/student/k/ktrebing/Documents/BA-ESN/scripterrors/esnError{:>05}.p".format(jobID), 'wb') as outputFile:
     pickle.dump(all_outputs, outputFile)
