@@ -4,6 +4,7 @@ from newESN import ESN
 import pickle
 import os
 import itertools
+import time
 
 # get Parameter according to JobID
 def generateParams(ID):
@@ -12,10 +13,12 @@ def generateParams(ID):
                             np.linspace(0.1, 1.5, num=10),
                             np.linspace(0.1, 2.0, num=10))
     # helper recipe nth
+    # basically: cut n-1 from the front and take the next
     values = next(itertools.islice(all,ID, None))
     keys = "input_leak_rate", "input_spectral_rad", "output_leak_rate", "output_spectral_rad"
     return dict(zip(keys,values))
 
+start_time = time.time()
 # get JobID
 jobID = int(os.environ.get("SGE_TASK_ID"))-1
 
@@ -24,11 +27,11 @@ params = generateParams(jobID)
 N = 4000   # number of datapoints
 n = 3       # n-parity
 timescale = 50
-rng = np.random.RandomState(1578) # maybe other seed 
+rng = np.random.RandomState(1578) # maybe other seed
 inputESN_reservoirSize=300
 outputESN_reservoirSize= 50
 
-averages = 2
+averages = 20
 
 errors = np.empty((averages,))
 for trial in range(averages):
@@ -71,8 +74,10 @@ for trial in range(averages):
     errors[trial] = np.sqrt(np.mean((final_prediction - test_targets) ** 2))
 
 averaged_error = errors.mean()
-
+#save in a dictionary
 all_outputs = dict(params=params,errors=errors,averaged_error=averaged_error)
 # save params and errors and average
 with open("/home/student/k/ktrebing/Documents/BA-ESN/scripterrors/esnError{:>05}.p".format(jobID), 'wb') as outputFile:
     pickle.dump(all_outputs, outputFile)
+
+print("--- %s minutes ---" % (time.time() - start_time)/60)
