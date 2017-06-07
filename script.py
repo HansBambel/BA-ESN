@@ -85,6 +85,7 @@ for trial in range(averages):
     outputESN.train(train_predicted_parity,train_targets,washout=washout)
     final_prediction = outputESN.predict(test_predicted_parity)
 
+    errors[trial] = np.sqrt(np.mean((final_prediction - test_targets) ** 2))
 #### randomprojectionmatrix
 '''
     # Generate training data
@@ -99,8 +100,10 @@ for trial in range(averages):
 
     intermediate_test = inputESN.predict(test_bits, readout_weights=inputESN_ident_Matrix)
     final_prediction = outputESN.predict(intermediate_test)
-'''
+    
     errors[trial] = np.sqrt(np.mean((final_prediction - test_targets) ** 2))
+'''
+
 
 averaged_error = errors.mean()
 #save in a dictionary
