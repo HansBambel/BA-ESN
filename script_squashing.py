@@ -45,31 +45,43 @@ for trial in range(averages):
                    noise=0.01,
                    input_scale=2,
                    input_shift=-1)
-    inputESN_ident_Matrix=np.eye(inputESN_reservoirSize)
+    ##### squashing
+    # Generate training data
+    bits, parity, _ = Parity_Data_Generator.generateParityData(N, n, timescale=timescale, randomstate=rng)
+    traintest_cutoff = int(np.ceil(0.7 * len(bits)))
+    train_bits, test_bits = bits[:traintest_cutoff], bits[traintest_cutoff:]
+    train_parity, test_parity = parity[:traintest_cutoff], parity[traintest_cutoff:]
 
-    outputESN = ESN(inputs=inputESN_reservoirSize,
+    washout=int(len(train_bits)/10)
+    inputESN.train(train_bits, train_parity, washout=washout)
+
+    ### generate new Training data for outputESN
+    output_N = 1500
+    bits, _, target = Parity_Data_Generator.generateParityData(output_N, n, timescale=timescale, randomstate=rng)
+    traintest_cutoff = int(np.ceil(0.7 * len(bits)))
+    train_bits, test_bits = bits[:traintest_cutoff], bits[traintest_cutoff:]
+    train_targets, test_targets = target[:traintest_cutoff], target[traintest_cutoff:]
+
+    train_predicted_parity = inputESN.predict(train_bits)
+    test_predicted_parity = inputESN.predict(test_bits)
+    # z-transformation
+    output_scale = 1/np.std(train_predicted_parity)
+    output_shift = -np.mean(train_predicted_parity)/np.std(train_predicted_parity)
+
+    outputESN = ESN(#inputs=inputESN_reservoirSize, # for randomprojectionmatrix
+                    inputs=1, # for squashing
                     neurons=outputESN_reservoirSize,
                     spectral_radius=params["output_spectral_rad"],
                     leak_rate= params["output_leak_rate"],  # adjust leak_rate
                     dt= 0.1,
                     sparsity=0.7,
                     noise=0.01,
-                    input_scale=0.85,
-                    input_shift=0)
+                    input_scale=output_scale,
+                    input_shift=output_shift)
 
-    # Generate training data
-    bits, _, target = Parity_Data_Generator.generateParityData(N, n, timescale=timescale, randomstate=rng)
-    traintest_cutoff = int(np.ceil(0.7 * len(bits)))
-    train_bits, test_bits = bits[:traintest_cutoff], bits[traintest_cutoff:]
-    train_targets, test_targets = target[:traintest_cutoff], target[traintest_cutoff:]
-
-
-    washout=int(len(train_bits)/10)
-    intermediate_train = inputESN.predict(train_bits, readout_weights=inputESN_ident_Matrix)
-    outputESN.train(intermediate_train, train_targets, washout=washout)
-
-    intermediate_test = inputESN.predict(test_bits, readout_weights=inputESN_ident_Matrix)
-    final_prediction = outputESN.predict(intermediate_test)
+    washout=int(len(test_predicted_parity/10))
+    outputESN.train(train_predicted_parity,train_targets,washout=washout)
+    final_prediction = outputESN.predict(test_predicted_parity)
 
     errors[trial] = np.sqrt(np.mean((final_prediction - test_targets) ** 2))
 
