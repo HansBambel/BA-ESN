@@ -27,7 +27,7 @@ params = generateParams(jobID)
 N = 4000   # number of datapoints
 n = 3       # n-parity
 timescale = 50
-rng = np.random.RandomState(1578) # maybe other seed
+rng = np.random.RandomState(1988) # maybe other seed
 inputESN_reservoirSize=300
 outputESN_reservoirSize= 50
 
