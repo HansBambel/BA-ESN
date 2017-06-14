@@ -80,4 +80,4 @@ all_outputs = dict(params=params,errors=errors,averaged_error=averaged_error)
 with open("/home/student/k/ktrebing/Documents/BA-ESN/scripterrors/esnError{:>05}.p".format(jobID), 'wb') as outputFile:
     pickle.dump(all_outputs, outputFile)
 
-print("--- %s minutes ---" % (time.time() - start_time)/60)
+print("--- {} minutes ---".format((time.time() - start_time)/60))
