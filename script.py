@@ -25,13 +25,13 @@ jobID = int(os.environ.get("SGE_TASK_ID"))-1
 params = generateParams(jobID)
 
 N = 4000   # number of datapoints
-n = 4       # n-parity
+n = 3       # n-parity
 timescale = 50
 rng = np.random.RandomState(1988) # maybe other seed
-inputESN_reservoirSize=100
+inputESN_reservoirSize=50
 outputESN_reservoirSize= 50
 
-averages = 10
+averages = 20
 
 errors = np.empty((averages,))
 for trial in range(averages):

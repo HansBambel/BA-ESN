@@ -1,1 +1,1 @@
-qsub -wd /home/student/k/ktrebing/Documents/BA-ESN -t 1-10 -l mem=2G -e /home/student/k/ktrebing/Documents/BA-ESN/gridfiles -o /home/student/k/ktrebing/Documents/BA-ESN/gridfiles -b y python3 script.py
+qsub -wd /home/student/k/ktrebing/Documents/BA-ESN -t 1-10001 -l mem=2G -e /home/student/k/ktrebing/Documents/BA-ESN/gridfiles -o /home/student/k/ktrebing/Documents/BA-ESN/gridfiles -b y python3 script.py
