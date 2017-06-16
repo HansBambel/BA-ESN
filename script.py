@@ -27,11 +27,11 @@ params = generateParams(jobID)
 N = 4000   # number of datapoints
 n = 3       # n-parity
 timescale = 50
-rng = np.random.RandomState(1988) # maybe other seed
+rng = np.random.RandomState(1338) # maybe other seed
 inputESN_reservoirSize=50
 outputESN_reservoirSize= 50
 
-averages = 20
+averages = 30
 
 errors = np.empty((averages,))
 for trial in range(averages):
