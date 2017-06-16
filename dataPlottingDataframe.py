@@ -57,6 +57,8 @@ plt.show()
 '''
 
 # ############# Randomprojection
+
+# with open("randomprojection_scripterrors_30/all_50_randomprojection_errors_dataframe.p", "rb")as inputfile:
 with open("randomprojection_100neurons_3parity_scripterrors/all_randomprojection_errors_dataframe.p", "rb")as inputfile:
     df = pd.DataFrame(pickle.load(inputfile))
 #
