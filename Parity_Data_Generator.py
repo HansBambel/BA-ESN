@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def generateParityData(N=5000,
                        n=3,
                        timescale=50,

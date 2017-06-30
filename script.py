@@ -1,6 +1,6 @@
 import Parity_Data_Generator
 import numpy as np
-from newESN import ESN
+from ESN import ESN
 import pickle
 import os
 import itertools
@@ -63,7 +63,7 @@ for trial in range(averages):
     train_bits, test_bits = bits[:traintest_cutoff], bits[traintest_cutoff:]
     train_targets, test_targets = target[:traintest_cutoff], target[traintest_cutoff:]
 
-
+    # wash out initial states
     washout=int(len(train_bits)/10)
     intermediate_train = inputESN.predict(train_bits, readout_weights=inputESN_ident_Matrix)
     outputESN.train(intermediate_train, train_targets, washout=washout)

@@ -39,6 +39,7 @@ class ESN(object):
         for i, row in enumerate(washoutblock.T):
             self._state_update(row)
 
+        # for every block calculate intermediate result
         for j in range(block_num):
             block = data[washout + j * block_size:washout + (j + 1) * block_size, :]
             state_values = np.empty((block.shape[0], self.neurons))
@@ -49,7 +50,7 @@ class ESN(object):
             lstsq.update(targets[washout + j * block_size:washout + (j + 1) * block_size, :], state_values)
 
         # self.readout_weights = np.linalg.lstsq(state_values, targets[washout:, :])[0].T
-        self.readout_weights = lstsq.omega.T
+        self.readout_weights = lstsq.omega.T # calculate final result and set weights
 
         # predictions = self.predict(data)
         # error = np.sqrt(((predictions - targets) ** 2 / targets.var(axis=0)).mean())
