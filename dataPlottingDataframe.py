@@ -15,7 +15,7 @@ min_row = df.loc[df["averaged_error"]==np.min(df["averaged_error"])]
 # print(list(df))
 
 
-## expected error given E[error|l1,R1] (marginalize)
+## expected error E[error|l1,R1] (marginalize)
 expected_error_given_input = df[["input_leak_rate","input_spectral_rad","averaged_error"]].groupby(["input_leak_rate","input_spectral_rad"], as_index=False)
 # print(expected_error.mean())
 plt.figure(figsize=(14,5))
@@ -29,7 +29,7 @@ plt.plot(min_row["input_leak_rate"],min_row["input_spectral_rad"],"wx")
 plt.xlabel("Leak-rate")
 plt.ylabel("Spectral radius")
 plt.colorbar().ax.set_title("Error")
-plt.title("Expected error given input parameters")
+plt.title("Expected error of input parameters")
 
 ## expected error given E[error|l2,R2] (marginalize)
 expected_error_given_output = df[["output_leak_rate","output_spectral_rad","averaged_error"]].groupby(["output_leak_rate","output_spectral_rad"], as_index=False)
@@ -44,7 +44,8 @@ plt.plot(min_row["output_leak_rate"],min_row["output_spectral_rad"],"wx")
 plt.xlabel("Leak-rate")
 plt.ylabel("Spectral radius")
 plt.colorbar().ax.set_title("Error")
-plt.title("Expected error given output parameters")
+plt.title("Expected error of output parameters")
+plt.savefig("Expected error.png", dpi=300)
 # plt.show()
 
 ###########################################################
@@ -65,7 +66,7 @@ print("Lowest error input:",min_row.iloc[0]["averaged_error"],"l-rate:",min_row.
 plt.xlabel("Leak-rate")
 plt.ylabel("Spectral radius")
 plt.colorbar().ax.set_title("Error")
-plt.title("Expected error given optimal output params")
+plt.title("Expected error of optimal output parameters")
 
 ##### given best input params plot errors of second esn
 plt.subplot(122)
@@ -83,7 +84,8 @@ print("Lowest error output:",min_row.iloc[0]["averaged_error"],"l-rate:",min_row
 plt.xlabel("Leak-rate")
 plt.ylabel("Spectral radius")
 plt.colorbar().ax.set_title("Error")
-plt.title("Expected error given optimal input params")
+plt.title("Expected error of optimal input parameters")
+plt.savefig("Expected error opt Params.png", dpi=300)
 # plt.show()
 ################################################################
 ######### same parameters
@@ -101,4 +103,5 @@ plt.xlabel("Leak-rate")
 plt.ylabel("Spectral radius")
 plt.colorbar().ax.set_title("Error")
 plt.title("Error given the same Parameters")
+plt.savefig("Expected same Params.png", dpi=300)
 plt.show()
